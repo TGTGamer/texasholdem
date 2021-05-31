@@ -1,0 +1,7 @@
+.env
+*.log
+*.map
+logs
+node_modules
+lib
+release.json

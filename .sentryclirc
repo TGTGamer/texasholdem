@@ -1,0 +1,6 @@
+[defaults]
+project=discord-bot
+org=tmwmedia
+
+[auth]
+token=d4827a96712f4832b8efb77f163f40f6535139c7115f496aa62a9112966a333b
