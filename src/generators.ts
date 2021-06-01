@@ -63,9 +63,16 @@ export async function createTable (deck:Deck, players: number): Promise<Players>
     }
     
     // burn card
-    result.burn = dealHand(deck, 1)
+    result.burn = burn(deck)
     
     // the flop
-    result.table = dealHand(deck, 3)
+    result.table = flop(deck)
     return result
 }
+
+// function aliases
+
+export const flop = (deck:Deck) => dealHand(deck, 3)
+export const turn = (deck: Deck) => dealHand(deck, 1)
+export const river = (deck: Deck) => dealHand(deck, 1)
+export const burn = (deck: Deck) => dealHand(deck, 1)
