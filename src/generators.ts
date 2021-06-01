@@ -1,4 +1,4 @@
-import { Deck } from '.'
+import { Deck, Players } from '.'
 
 export async function generateDeck(decks: number = 3): Promise<Deck> {
   let deck: Deck = {
@@ -41,6 +41,9 @@ export async function dealHand(deck: Deck, cards: number) {
   return deck.cards.splice(0, cards)
 }
 
-export async function createTable (players: number) {
-    while 
+export async function createTable (deck:Deck, players: number): Promise<Players> {
+    let result: Partial<Players> = {}
+    while (result.length !== players+1) {
+        result[result.length+1] = dealHand(deck)
+    }
 }
