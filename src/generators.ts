@@ -43,7 +43,15 @@ export async function dealHand(deck: Deck, cards: number) {
 
 export async function createTable (deck:Deck, players: number): Promise<Players> {
     let result: Partial<Players> = {}
-    while (result.length !== players+1) {
-        result[result.length+1] = dealHand(deck)
+    let cardsDealt: number = 0
+    while (cardsDealt) {
+        let playersDealt: number = 0
+        while (playersDealt !== players+1) {
+            if (playersDealt == players) result.table = dealHand(deck,1)
+            else result[playersDealt] = dealHand(deck, 1)
+            playersDealt++
+        }
+        cardsDealt++
     }
+    return result
 }
