@@ -40,3 +40,7 @@ export async function shuffleDeck(deck: Deck, count: number): Promise<Deck> {
 export async function dealHand(deck: Deck, cards: number) {
   return deck.cards.splice(0, cards)
 }
+
+export async function createTable (players: number) {
+    while 
+}
