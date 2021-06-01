@@ -1,6 +1,6 @@
 {
   "name": "@tgtgamer/texasholdem",
-  "version": "0.1.1",
+  "version": "0.1.2-0",
   "repository": {
     "type": "git",
     "url": "https://github.com/tgtgamer/texasholdem.git"
@@ -19,9 +19,6 @@
     "Contributors can be found in readme.md"
   ],
   "license": "unknown",
-  "engines": {
-    "node": "^15.8.0"
-  },
   "keywords": [],
   "scripts": {
     "build": "tsc -p tsconfig.json",

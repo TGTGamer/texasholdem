@@ -3,7 +3,6 @@
  *========================================================================**/
 export * from './generators'
 
-
 export enum Faces {
   one = 1,
   two = 2,
@@ -76,7 +75,7 @@ export interface HandValue {
 }
 
 export interface Players {
-  table: Card[]
-  burn: Card[]
-  [index: string]: Card[]
+  table?: Card[]
+  burn?: Card[]
+  [index: string]: Card[] | undefined
 }

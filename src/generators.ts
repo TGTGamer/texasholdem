@@ -1,4 +1,4 @@
-import { Deck, Players } from '.'
+import { Deck,Players } from '.'
 
 export async function generateDeck(decks: number = 3): Promise<Deck> {
   let deck: Deck = {
@@ -37,10 +37,11 @@ export async function shuffleDeck(deck: Deck, count: number): Promise<Deck> {
   return deck
 }
 
-export async function splitDeck(deck: Deck, split: number = Math.floor(Math.random() * deck.cards.length)) {
-    const split = deck.cards.splice(split, deck.cards.length - split)
+export async function splitDeck(deck: Deck, splitPoint: number = Math.floor(Math.random() * deck.cards.length)) {
+    const split = deck.cards.splice(splitPoint, deck.cards.length - splitPoint)
     deck.cards = deck.cards.concat(split)
-    deck.shuffled.split = true
+    if (deck.shuffled) deck.shuffled.split = true
+    else deck.shuffled = {split: true, times: 0}
     return deck
 }
 
@@ -49,24 +50,24 @@ export async function dealHand(deck: Deck, cards: number) {
 }
 
 export async function createTable (deck:Deck, players: number): Promise<Players> {
-    let result: Partial<Players> = {}
+    let result: Players = {}
     let cardsDealt: number = 0
     
     // deal cards to players
     while (cardsDealt) {
         let playersDealt: number = 0
         while (playersDealt !== players) {
-            result[playersDealt] = dealHand(deck, 1)
+            result[playersDealt] = await dealHand(deck, 1)
             playersDealt++
         }
         cardsDealt++
     }
     
     // burn card
-    result.burn = burn(deck)
+    result.burn = await burn(deck)
     
     // the flop
-    result.table = flop(deck)
+    result.table = await flop(deck)
     return result
 }
 
