@@ -74,5 +74,6 @@ export interface HandValue {
 
 export interface Players {
   table: Card[]
+  burn: Card[]
   [index: string]: Card[]
 }
