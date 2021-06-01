@@ -1,6 +1,6 @@
 {
   "name": "@tgtgamer/texasholdem",
-  "version": "0.1.1-3",
+  "version": "0.1.1-5",
   "repository": {
     "type": "git",
     "url": "https://github.com/tgtgamer/texasholdem.git"
@@ -25,7 +25,7 @@
   "keywords": [],
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "dev:build": "npm run v:pre && git add . && cz && tsc -p tsconfig.json",
+    "dev:build": "tsc -p tsconfig.json && jest && npm run v:pre && git add . && cz",
     "dev:format": "npm run dev:format-scripts",
     "dev:format-check": "prettier --config .prettier.json --check .",
     "dev:format-scripts": "prettier --config .prettier.json --write .",
@@ -51,8 +51,14 @@
     "typescript": "^4.1.5"
   },
   "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@babel/preset-env": "^7.14.4",
+    "@babel/preset-typescript": "^7.13.0",
+    "@types/jest": "^26.0.23",
     "@types/node": "12.12.2",
+    "babel-jest": "^27.0.2",
     "cz-conventional-changelog": "3.3.0",
+    "jest": "^27.0.3",
     "prettier": "^2.2.1",
     "prettier-plugin-organize-imports": "^1.1.1",
     "prettier-plugin-pkg": "^0.8.0",
