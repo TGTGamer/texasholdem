@@ -37,6 +37,13 @@ export async function shuffleDeck(deck: Deck, count: number): Promise<Deck> {
   return deck
 }
 
+export async function splitDeck(deck: Deck, split: number = Math.floor(Math.random() * deck.cards.length)) {
+    const split = deck.cards.splice(split, deck.cards.length - split)
+    deck.cards = deck.cards.concat(split)
+    deck.shuffled.split = true
+    return deck
+}
+
 export async function dealHand(deck: Deck, cards: number) {
   return deck.cards.splice(0, cards)
 }
