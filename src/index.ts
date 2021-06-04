@@ -1,3 +1,5 @@
+import { createTable, dealHand, generateDeck } from './generators'
+
 /**========================================================================
  *                           INTERFACES
  *========================================================================**/
@@ -57,6 +59,7 @@ export enum HandRanking {
 export interface Deck {
   cards: Card[]
   decks: number
+  generated: Date
   shuffled?: {
     times: number
     split: boolean
@@ -77,5 +80,36 @@ export interface HandValue {
 export interface Players {
   table?: Card[]
   burn?: Card[]
-  [index: string]: Card[] | undefined
+  [index: string]: Player | undefined | Card[]
+}
+
+export interface Player {
+  cards: Card[]
+  bet: number | false
+}
+
+export class Game {
+  protected Players?: Players
+  protected Deck?: Deck
+  protected Valid: true | Date = new Date()
+  // constructor() {}
+  generateDeck = generateDeck.bind(this)
+  shuffleDeck = generateDeck.bind(this)
+  dealHand = dealHand.bind(this)
+  createTable = createTable.bind(this)
+  public async getDeck() {
+    this.Valid = new Date()
+    return this.Deck
+  }
+  public async validateDeck() {
+    if (this.Valid !== true && this.Deck && this.Valid > this.Deck?.generated) {
+      this.Valid = true
+      return true
+    }
+    return false
+  }
+  flop = (deck?: Deck) => dealHand.bind(this)(3, deck)
+  turn = (deck?: Deck) => dealHand.bind(this)(1, deck)
+  river = (deck?: Deck) => dealHand.bind(this)(1, deck)
+  burn = (deck?: Deck) => dealHand.bind(this)(1, deck)
 }

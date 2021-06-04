@@ -1,9 +1,10 @@
-import { Deck,Players } from '.'
+import { Deck, Game, Players } from '.'
 
-export async function generateDeck(decks: number = 3): Promise<Deck> {
+export async function generateDeck(this: Game, decks: number = 1) {
   let deck: Deck = {
     cards: [],
-    decks: decks
+    decks: decks,
+    generated: new Date()
   }
   let deckCound = 0
   while (deckCound < decks) {
@@ -21,10 +22,19 @@ export async function generateDeck(decks: number = 3): Promise<Deck> {
     }
     deckCound++
   }
-  return deck
+  this.Deck = deck
 }
 
-export async function shuffleDeck(deck: Deck, count: number): Promise<Deck> {
+export async function shuffleDeck(
+  this: Game,
+  count: number,
+  deck: Deck | undefined = this.Deck
+) {
+  if (this.Valid !== true)
+    throw new Error(
+      'Deck is invalid. You need to regenerate and validate the deck'
+    )
+  if (!deck) throw new Error("Deck isn't defined")
   deck.shuffled = { times: 0, split: false }
   while (deck.shuffled.times < count) {
     deck.cards.sort(() => Math.floor(Math.random() * 20) - 10)
@@ -37,43 +47,77 @@ export async function shuffleDeck(deck: Deck, count: number): Promise<Deck> {
   return deck
 }
 
-export async function splitDeck(deck: Deck, splitPoint: number = Math.floor(Math.random() * deck.cards.length)) {
-    const split = deck.cards.splice(splitPoint, deck.cards.length - splitPoint)
-    deck.cards = deck.cards.concat(split)
-    if (deck.shuffled) deck.shuffled.split = true
-    else deck.shuffled = {split: true, times: 0}
-    return deck
+export async function splitDeck(
+  this: Game,
+  deck: Deck | undefined = this.Deck,
+  splitPoint: number = deck ? Math.floor(Math.random() * deck.cards.length) : 0
+) {
+  if (this.Valid !== true)
+    throw new Error(
+      'Deck is invalid. You need to regenerate and validate the deck'
+    )
+  if (!deck) throw new Error("Deck isn't defined")
+  const split = deck.cards.splice(splitPoint, deck.cards.length - splitPoint)
+  deck.cards = deck.cards.concat(split)
+  if (deck.shuffled) deck.shuffled.split = true
+  else deck.shuffled = { split: true, times: 0 }
+  return deck
 }
 
-export async function dealHand(deck: Deck, cards: number) {
+export async function dealHand(
+  this: Game,
+  cards: number,
+  deck: Deck | undefined = this.Deck
+) {
+  if (this.Valid !== true)
+    throw new Error(
+      'Deck is invalid. You need to regenerate and validate the deck'
+    )
+  if (!deck) throw new Error("Deck isn't defined")
   return deck.cards.splice(0, cards)
 }
 
-export async function createTable (deck:Deck, players: number): Promise<Players> {
-    let result: Players = {}
-    let cardsDealt: number = 0
-    
-    // deal cards to players
-    while (cardsDealt) {
-        let playersDealt: number = 0
-        while (playersDealt !== players) {
-            result[playersDealt] = await dealHand(deck, 1)
-            playersDealt++
-        }
-        cardsDealt++
+export async function createTable(
+  this: Game,
+  players: number,
+  deck: Deck | undefined = this.Deck
+): Promise<Players> {
+  if (this.Valid !== true)
+    throw new Error(
+      'Deck is invalid. You need to regenerate and validate the deck'
+    )
+  if (!deck) throw new Error("Deck isn't defined")
+  let result: Players = {}
+  let cardsDealt: number = 0
+
+  // deal cards to players
+  while (cardsDealt) {
+    let playersDealt: number = 0
+    while (playersDealt !== players) {
+      result[playersDealt] = {
+        cards: await dealHand.bind(this)(1),
+        bet: 0
+      }
+      playersDealt++
     }
-    
-    // burn card
-    result.burn = await burn(deck)
-    
-    // the flop
-    result.table = await flop(deck)
-    return result
+    cardsDealt++
+  }
+
+  // burn card
+  result.burn = await this.burn(deck)
+
+  // the flop
+  result.table = await this.flop(deck)
+  return result
 }
 
-// function aliases
-
-export const flop = (deck:Deck) => dealHand(deck, 3)
-export const turn = (deck: Deck) => dealHand(deck, 1)
-export const river = (deck: Deck) => dealHand(deck, 1)
-export const burn = (deck: Deck) => dealHand(deck, 1)
+export async function validateDeck(
+  this: Game,
+  deck: Deck | undefined = this.Deck
+) {
+  if (this.Valid !== true)
+    throw new Error(
+      'Deck is invalid. You need to regenerate and validate the deck'
+    )
+  if (!deck) throw new Error("Deck isn't defined")
+}
