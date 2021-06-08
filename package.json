@@ -21,6 +21,8 @@
   "license": "unknown",
   "keywords": [],
   "scripts": {
+    "dev": "nodemon",
+    "start": "ts-node src/server.ts",
     "build": "tsc -p tsconfig.json",
     "dev:build": "tsc -p tsconfig.json && jest && npm run v:pre && git add . && cz",
     "dev:format": "npm run dev:format-scripts",
